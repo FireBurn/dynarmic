@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <memory>
 #include <type_traits>
 
 #ifdef _MSC_VER
@@ -36,7 +37,7 @@ auto make_overaligned_unique_ptr_array(size_t element_count)
 {
     const size_t min_size = element_count * sizeof(T);
     const size_t alloc_size = (min_size + alignment - 1) / alignment * alignment;
-#ifdef _MSC_VER
+#ifdef _WIN32
     return overaligned_unique_ptr<alignment, T[]>{static_cast<T*>(_aligned_malloc(alloc_size, alignment))};
 #else
     return overaligned_unique_ptr<alignment, T[]>{static_cast<T*>(std::aligned_alloc(alignment, alloc_size))};
